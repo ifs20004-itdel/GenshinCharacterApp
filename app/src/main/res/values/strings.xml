@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Genshin Character List</string>
+    <string name="geo_vision">Geo</string>
+    <string name="dendro_vision">Dendro</string>
+    <string name="cryo_vision">Cryo</string>
+    <string name="pyro_vision">Pyro</string>
+    <string name="hydro_vision">Hydro</string>
+    <string name="electro_vision">Electro</string>
+    <string name="anemo_vision">Anemo</string>
+    <string name="catalyst">Catalyst</string>
+    <string name="sword">Sword</string>
+    <string name="claymore">Claymore</string>
+    <string name="polearm">Polearm</string>
+    <string name="bow">Bow</string>
+    <string name="mondstadt">Mondstadt</string>
+    <string name="liyue">Liyue</string>
+    <string name="inazuma">Inazuma</string>
+    <string name="sumeru">Sumeru</string>
+    <string name="snezhnaya">Snezhnaya</string>
+    <string name="home_page">Home</string>
+    <string name="favorite_page">Favorite</string>
+    <string name="about_page">About</string>
+    <string name="search_hero">Search Hero</string>
+    <string name="empty_data">No Item Found</string>
+</resources>
