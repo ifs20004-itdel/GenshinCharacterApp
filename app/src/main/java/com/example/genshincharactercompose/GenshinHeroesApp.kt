@@ -21,6 +21,7 @@ import com.example.genshincharactercompose.navigation.Screen
 import com.example.genshincharactercompose.ui.screen.home.HomeScreen
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.genshincharactercompose.ui.screen.about.AboutScreen
 import com.example.genshincharactercompose.ui.theme.GenshinCharacterComposeTheme
 
 @Composable
@@ -56,7 +57,7 @@ fun GenshinHeroesApp(
 
             }
             composable(Screen.About.route){
-
+                AboutScreen()
             }
         }
 
@@ -78,19 +79,22 @@ private fun BottomBar(
 
         val navigationItems = listOf(
             NavigationItem(
-                    title = stringResource(R.string.home_page),
+                    title = stringResource(R.string.home),
                     icon = Icons.Default.Home,
-                    screen = Screen.Home
+                    screen = Screen.Home,
+                    contentDescription = stringResource(id = R.string.home)
         ),
         NavigationItem(
-            title = stringResource(R.string.favorite_page),
+            title = stringResource(R.string.favorite),
             icon = Icons.Default.Favorite,
-            screen = Screen.Favorite
+            screen = Screen.Favorite,
+            contentDescription = stringResource(id = R.string.favorite)
         ),
         NavigationItem(
-            title = stringResource(R.string.about_page),
+            title = stringResource(R.string.about),
             icon = Icons.Default.AccountCircle,
-            screen = Screen.About
+            screen = Screen.About,
+            contentDescription = stringResource(id = R.string.about_page)
         ),
     )
         BottomNavigation {
@@ -100,7 +104,7 @@ private fun BottomBar(
                 icon = {
                     Icon(
                         imageVector = item.icon,
-                        contentDescription = item.title
+                        contentDescription = item.contentDescription
                     )
                 },
                 label = { Text(item.title) },

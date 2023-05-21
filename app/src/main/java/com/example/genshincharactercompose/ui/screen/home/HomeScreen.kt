@@ -39,6 +39,7 @@ fun HomeScreen (
                 viewModel.searchHeroes(query)
             }
             is UiState.Success -> {
+
                 HomeContent(
                     heroes = uiState.data,
                     query = query,
