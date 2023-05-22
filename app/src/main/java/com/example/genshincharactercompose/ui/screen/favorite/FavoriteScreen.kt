@@ -1,6 +1,5 @@
-package com.example.genshincharactercompose.ui.screen.home
+package com.example.genshincharactercompose.ui.screen.favorite
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,67 +8,45 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.genshincharactercompose.R
+import com.example.genshincharactercompose.data.local.entity.HeroEntity
 import com.example.genshincharactercompose.di.Injection
-import com.example.genshincharactercompose.model.Hero
 import com.example.genshincharactercompose.ui.ViewModelFactory
-import com.example.genshincharactercompose.ui.common.UiState
 import com.example.genshincharactercompose.ui.components.DataNotFound
 import com.example.genshincharactercompose.ui.components.HeroItem
-import com.example.genshincharactercompose.ui.components.SearchBar
+import com.example.genshincharactercompose.ui.components.TopBar
 
 @Composable
-fun HomeScreen (
-    modifier: Modifier =Modifier,
-    viewModel: HomeScreenViewModel = viewModel(
+fun FavoriteScreen (
+    viewModel: FavoriteScreenViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideRepository(LocalContext.current))
     ),
-    navigationToDetail:(String) ->Unit,
+    navigateBack : () -> Unit,
+    navigationToDetail: (String) -> Unit,
 ) {
-    val query by viewModel.query
-    viewModel.uiState.collectAsState(initial = UiState.Loading).value.let {
-        uiState ->
-        when(uiState){
-            is UiState.Loading -> {
-                viewModel.getAllHeroes()
-                viewModel.searchHeroes(query)
-            }
-            is UiState.Success -> {
-                HomeContent(
-                    heroes = uiState.data,
-                    query = query,
-                    viewModel::searchHeroes,
-                    modifier = modifier,
-                    navigationToDetail = navigationToDetail
-                )
-            }
-            is UiState.Error -> {
-
-            }
-        }
-    }
+    val data by viewModel.getFavoriteHero().observeAsState()
+    data?.let { FavoriteContent(heroes = it, navigationToDetail = navigationToDetail, navigateBack = navigateBack) }
 }
 
 @Composable
-fun HomeContent(
-    heroes : List<Hero>,
-    query: String,
-    onQueryChange: (String) -> Unit,
+fun FavoriteContent(
+    heroes : List<HeroEntity>,
     modifier: Modifier = Modifier,
+    navigateBack: () -> Unit,
     navigationToDetail: (String) -> Unit
 ){
     Column(
         modifier = modifier
     ) {
-        SearchBar(query = query, onQueryChange = onQueryChange , modifier = modifier.background(Color(0xFF3e9f85)))
+        TopBar(name = stringResource(id = R.string.favorite) , navigateBack = navigateBack)
         if(heroes.isEmpty()){
             DataNotFound()
         }
@@ -86,7 +63,7 @@ fun HomeContent(
                     photoUrl = data.photoUrl,
                     name = data.name,
                     rating = data.rating,
-                    vision = stringResource(id = data.vision),
+                    vision = data.vision,
                     modifier = Modifier.clickable {
                         navigationToDetail(data.name)
                     }

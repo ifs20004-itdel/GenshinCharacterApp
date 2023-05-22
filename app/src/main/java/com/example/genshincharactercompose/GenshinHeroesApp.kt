@@ -7,21 +7,24 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.genshincharactercompose.navigation.NavigationItem
 import com.example.genshincharactercompose.navigation.Screen
-import com.example.genshincharactercompose.ui.screen.home.HomeScreen
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.genshincharactercompose.ui.screen.about.AboutScreen
+import com.example.genshincharactercompose.ui.screen.detail.DetailScreen
+import com.example.genshincharactercompose.ui.screen.favorite.FavoriteScreen
+import com.example.genshincharactercompose.ui.screen.home.HomeScreen
 import com.example.genshincharactercompose.ui.theme.GenshinCharacterComposeTheme
 
 @Composable
@@ -45,19 +48,40 @@ fun GenshinHeroesApp(
             modifier = Modifier.padding(innerPadding),
             ){
             composable(Screen.Home.route){
-                val context = LocalContext.current
                 HomeScreen(
                     navigationToDetail = {
-                        heroId ->
-                        navController.navigate(Screen.DetailHero.createRoute(heroId))
+                        heroName ->
+                        navController.navigate(Screen.DetailHero.createRoute(heroName))
                     }
                 )
             }
             composable(Screen.Favorite.route){
-
+                FavoriteScreen (
+                        navigateBack = {
+                            navController.navigateUp()
+                        } ) { heroName ->
+                    navController.navigate(Screen.DetailHero.createRoute(heroName))
+                }
             }
             composable(Screen.About.route){
-                AboutScreen()
+                AboutScreen(
+                    navigateBack = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+            composable(
+                route = Screen.DetailHero.route,
+                arguments = listOf(navArgument("heroName"){
+                    type = NavType.StringType
+                }),){
+                val id = it.arguments?.getString("heroName") ?: "Albedo"
+                DetailScreen(
+                    heroName = id,
+                    navigateBack = {
+                        navController.navigateUp()
+                    }
+                )
             }
         }
 
@@ -117,7 +141,7 @@ private fun BottomBar(
                         restoreState = true
                         launchSingleTop = true
                     }
-                }
+                },
             )
         }
     }

@@ -5,5 +5,6 @@ data class DetailHero (
     val weapon: Int,
     val constellation : String,
     val region : Int,
-    val description: String
+    val description: String,
+    val hero : Hero
     )

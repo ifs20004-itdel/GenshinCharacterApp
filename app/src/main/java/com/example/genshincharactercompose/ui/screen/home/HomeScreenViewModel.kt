@@ -16,10 +16,10 @@ class HomeScreenViewModel (
     private val repository: HeroRepository
         ): ViewModel() {
 
-        private val _uiState : MutableStateFlow<UiState<List<Hero>>> =
-            MutableStateFlow(UiState.Loading)
-        val uiState : StateFlow<UiState<List<Hero>>>
-            get() = _uiState
+    private val _uiState : MutableStateFlow<UiState<List<Hero>>> =
+        MutableStateFlow(UiState.Loading)
+    val uiState : StateFlow<UiState<List<Hero>>>
+        get() = _uiState
 
     private val _query = mutableStateOf("")
     val query: State<String> get() = _query
@@ -40,7 +40,7 @@ class HomeScreenViewModel (
     fun searchHeroes(newQuery: String){
         viewModelScope.launch {
         _query.value =  newQuery
-        repository.dummySearchHero(_query.value)
+        repository.searchHero(_query.value)
             .catch {
                 _uiState.value = UiState.Error(it.message.toString())
             }
